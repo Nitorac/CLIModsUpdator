@@ -13,15 +13,21 @@ public class LocalMod implements Serializable {
 
     private String modid;
     private String name;
+    @SerializedName(value="desc", alternate={"description"})
     private String desc;
     private String version;
 
-    @SerializedName("authorList")
+    @SerializedName(value = "authorList", alternate = {"authors"})
     private List<String> authors;
 
     private String credits;
 
     public LocalMod(File file){
         this.file = file;
+    }
+
+    public LocalMod setFile(File file){
+        this.file = file;
+        return this;
     }
 }

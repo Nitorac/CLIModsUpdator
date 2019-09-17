@@ -22,34 +22,17 @@ public class JsonStorageManager {
 
     public JsonStorageManager(){
         try {
-            Files.write(OPTIONS.toPath(), root.toString().getBytes(), StandardOpenOption.CREATE);
+            if(!OPTIONS.exists()){
+                Files.write(OPTIONS.toPath(), root.toString().getBytes(), StandardOpenOption.CREATE);
+            }
             root = new JsonParser().parse(new FileReader(OPTIONS)).getAsJsonObject();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public JsonElement set(String prop, Object val){
-        try {
-            Constructor<JsonPrimitive> constr = JsonPrimitive.class.getDeclaredConstructor(Object.class);
-            constr.setAccessible(true);
-            JsonElement elem = constr.newInstance(val);
-            root.add(prop, elem);
-            save();
-            return elem;
-        } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public JsonElement get(String prop){
-        return root.get(prop);
-    }
-
-    public JsonElement get(String prop, Object def){
-        JsonElement elem;
-        return (elem = root.get(prop)) == null ? set(prop, def) : elem;
+    public JsonObject getRoot(){
+        return root;
     }
 
     public void save(){

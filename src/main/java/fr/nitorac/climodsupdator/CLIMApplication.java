@@ -36,7 +36,9 @@ public class CLIMApplication implements ApplicationRunner {
 				.registerTypeAdapter(ReleaseType.class, relDeser).create();
 
 		storageManager = new JsonStorageManager();
-		WORKING_DIRECTORY = new File(getStorageManager().get(JsonStorageManager.WD, ".").getAsString());
+
+		JsonElement wd = getStorageManager().getRoot().get(JsonStorageManager.WD);
+		WORKING_DIRECTORY = new File(wd != null ? wd.getAsString() : ".");
 
 		SpringApplication.run(CLIMApplication.class, args);
 	}

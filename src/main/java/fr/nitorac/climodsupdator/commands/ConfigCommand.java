@@ -32,6 +32,7 @@ public class ConfigCommand {
     @ShellMethod(value = "Set the current working directory", prefix = "wd")
     public static void setWorkingDirectory(@ShellOption("Path") String path){
         CLIMApplication.WORKING_DIRECTORY = new File(path);
-        CLIMApplication.getStorageManager().set(JsonStorageManager.WD, path);
+        CLIMApplication.getStorageManager().getRoot().addProperty(JsonStorageManager.WD, path);
+        CLIMApplication.getStorageManager().save();
     }
 }

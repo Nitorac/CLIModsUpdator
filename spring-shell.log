@@ -13,3 +13,17 @@
 1568314680934:help
 1568314683072:update
 1568679748321:exit
+1568682225774:wd
+1568682231623:help
+1568682257005:set-working-directory D:\\Users\\Nitorac\\AppData\\Roaming\\.technic\\modpacks\\nitoreborned\\mods
+1568682991816:set-working-directory
+1568682993212:help
+1568683020832:set-working-directory ""
+1568683058775:set-working-directory D:\\\\Users\\\\Nitorac\\\\AppData\\\\Roaming\\\\.technic\\\\modpacks\\\\nitoreborned\\\\mods
+1568683078438:set-working-directory D:\\Users\\Nitorac\\AppData\\Roaming\\.technic\\modpacks\\nitoreborned\\mods
+1568683116742:set-working-directory D:\\\\Users\\\\Nitorac\\\\AppData\\\\Roaming\\\\.technic\\\\modpacks\\\\nitoreborned\\\\mods
+1568683130920:update
+1568683147509:stacktrace
+1568683668868:update
+1568683905346:stacktrace
+1568684111056:update
