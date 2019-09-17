@@ -1,0 +1,1 @@
+mvnw clean package spring-boot:repackage && start cmd /C java -jar target/climodsupdator-0.0.1-SNAPSHOT.jar
