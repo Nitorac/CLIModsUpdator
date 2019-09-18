@@ -1,21 +1,19 @@
 package fr.nitorac.climodsupdator.storage;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
-import fr.nitorac.climodsupdator.CLIMApplication;
 
-import java.io.*;
-import java.lang.reflect.Constructor;
-import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
 
 public class JsonStorageManager {
 
     public static final File OPTIONS = new File("options.json");
+
     public static JsonObject root = new JsonObject();
 
     public static final String WD = "workdir";

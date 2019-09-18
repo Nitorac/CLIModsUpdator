@@ -1,8 +1,6 @@
 package fr.nitorac.climodsupdator.commands;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import fr.nitorac.climodsupdator.CLIMApplication;
@@ -17,14 +15,14 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
-import java.io.*;
-import java.lang.reflect.Type;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -65,14 +63,19 @@ public class UpdateCommand {
     }
 
     public List<RemoteMod> getRemoteMods() throws IOException{
-        String url = "https://addons-ecs.forgesvc.net/api/v2/addon/search?categoryId=0&gameId=432&gameVersion=1.12.2&index=0&pageSize=10000&searchFilter=&sectionId=6&sort=2";
+        String url = "https://addons-ecs.forgesvc.net/api/v2/addon/search?categoryId=0&gameId=432&gameVersion=" + +"&index=0&pageSize=10000&searchFilter=&sectionId=6&sort=2";
         return CLIMApplication.gson.fromJson(new InputStreamReader(new URL(url).openStream()), new TypeToken<List<RemoteMod>>(){}.getType());
     }
 
     public List<LocalMod> getLocalMods(){
         List<String> errors = new ArrayList<>();
         List<LocalMod> mods = new ArrayList<>();
-        Arrays.stream(CLIMApplication.WORKING_DIRECTORY.listFiles((dir, name) -> name.toLowerCase().endsWith("jar"))).forEach(jar -> {
+        File[] files = CLIMApplication.WORKING_DIRECTORY.listFiles((dir, name) -> name.toLowerCase().endsWith("jar"));
+        if (files == null || files.length == 0) {
+            shellHelper.printError("No mod found in base folder : " + CLIMApplication.WORKING_DIRECTORY.getPath());
+            return mods;
+        }
+        Arrays.stream(files).forEach(jar -> {
             try (ZipFile zipFile = new ZipFile(jar)) {
                 ZipEntry entry = zipFile.getEntry("mcmod.info");
                 if(entry != null){
@@ -86,6 +89,10 @@ public class UpdateCommand {
             }
         });
         shellHelper.printWarning("Failed to parse mods " + Arrays.toString(errors.toArray()) + "!");
+        shellHelper.print("");
+        errors.forEach(jar -> {
+            String url = inputReader.prompt("Entrez l'URL pour le mod " + jar + " : ");
+        });
         return mods;
     }
 }

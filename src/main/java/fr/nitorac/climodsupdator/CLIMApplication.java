@@ -2,7 +2,7 @@ package fr.nitorac.climodsupdator;
 
 import com.google.gson.*;
 import fr.nitorac.climodsupdator.commands.ConfigCommand;
-import fr.nitorac.climodsupdator.commands.UpdateCommand;
+import fr.nitorac.climodsupdator.models.LocalModpack;
 import fr.nitorac.climodsupdator.models.ReleaseType;
 import fr.nitorac.climodsupdator.storage.JsonStorageManager;
 import org.springframework.boot.ApplicationArguments;
@@ -11,10 +11,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.File;
-import java.lang.reflect.Type;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @SpringBootApplication
@@ -25,6 +21,8 @@ public class CLIMApplication implements ApplicationRunner {
 	private static JsonStorageManager storageManager;
 
 	public static File WORKING_DIRECTORY;
+
+	public static LocalModpack activeModpack;
 
 	public static void main(String[] args) {
 		JsonSerializer<ReleaseType> relSer = (src, typeOfSrc, context) -> src == null ? null : new JsonPrimitive(src.getTypeId());
