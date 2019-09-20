@@ -17,8 +17,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.shell.jline.JLineShellAutoConfiguration;
 
+import java.util.Properties;
+
 @Configuration
 public class CLIMSpringShellConfig {
+    @Bean
+    Properties shellProperties() {
+        return new Properties();
+    }
+
     @Bean
     public ShellHelper shellHelper(@Lazy Terminal terminal) {
         return new ShellHelper(terminal);

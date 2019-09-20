@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import fr.nitorac.climodsupdator.CLIMApplication;
-import fr.nitorac.climodsupdator.utils.ShellHelper;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,10 +14,9 @@ import java.util.List;
 
 public class LocalModpack {
 
+    public static final String NAME = "name";
     public static final String GAME_VERSION = "gameVersion";
     public static final String MODS = "mods";
-
-    private File modPackConf;
 
     @Getter
     @Setter
@@ -32,22 +30,22 @@ public class LocalModpack {
     @Setter
     private List<LocalMod> mods;
 
-    public LocalModpack(String name, File modPackConf) {
-        this.name = name;
-        this.modPackConf = modPackConf;
+    private File config;
+
+    public LocalModpack(File config) throws FileNotFoundException {
+        this.config = config;
+        readConf();
     }
 
-    public void readConf(ShellHelper helper) {
-        try {
-            if (!modPackConf.exists()) {
-            } else {
-                JsonObject root = new JsonParser().parse(new FileReader(modPackConf)).getAsJsonObject();
-                gameVersion = root.get(GAME_VERSION).getAsString();
-                mods = CLIMApplication.gson.fromJson(root.get(MODS).getAsJsonArray(), new TypeToken<List<LocalMod>>() {
-                }.getType());
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+    public void readConf() throws FileNotFoundException {
+        if (!config.exists()) {
+            throw new FileNotFoundException("File modpack.json doesn't exist, you have to create it first ! (" + config.getAbsolutePath() + ")");
+        } else {
+            JsonObject root = new JsonParser().parse(new FileReader(config)).getAsJsonObject();
+            name = root.get(NAME).getAsString();
+            gameVersion = root.get(GAME_VERSION).getAsString();
+            mods = CLIMApplication.gson.fromJson(root.get(MODS).getAsJsonArray(), new TypeToken<List<LocalMod>>() {
+            }.getType());
         }
     }
 }

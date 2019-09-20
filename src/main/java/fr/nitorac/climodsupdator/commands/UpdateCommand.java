@@ -63,7 +63,7 @@ public class UpdateCommand {
     }
 
     public List<RemoteMod> getRemoteMods() throws IOException{
-        String url = "https://addons-ecs.forgesvc.net/api/v2/addon/search?categoryId=0&gameId=432&gameVersion=" + +"&index=0&pageSize=10000&searchFilter=&sectionId=6&sort=2";
+        String url = "https://addons-ecs.forgesvc.net/api/v2/addon/search?categoryId=0&gameId=432&gameVersion=" + CLIMApplication.getStorageManager().getLoadedModpack().getGameVersion() + "&index=0&pageSize=10000&searchFilter=&sectionId=6&sort=2";
         return CLIMApplication.gson.fromJson(new InputStreamReader(new URL(url).openStream()), new TypeToken<List<RemoteMod>>(){}.getType());
     }
 
