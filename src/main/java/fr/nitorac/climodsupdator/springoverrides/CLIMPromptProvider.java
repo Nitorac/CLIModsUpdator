@@ -17,6 +17,10 @@ public class CLIMPromptProvider implements PromptProvider {
 
     @Override
     public AttributedString getPrompt() {
-        return new AttributedString(PromptColor.CYAN + "[CLIM" + (CLIMApplication.getStorageManager().isModpackLoaded() ? "" : ":" + PromptColor.GREEN + CLIMApplication.getStorageManager().getLoadedModpack().getName() + PromptColor.CYAN) + "] -> " + PromptColor.RESET);
+        String suffix = "";
+        if (CLIMApplication.getStorageManager().isModpackLoaded()) {
+            suffix = ":" + PromptColor.GREEN + CLIMApplication.getActiveModpack().getName();
+        }
+        return new AttributedString(PromptColor.CYAN + "[CLIM" + suffix + PromptColor.CYAN + "] -> " + PromptColor.RESET);
     }
 }

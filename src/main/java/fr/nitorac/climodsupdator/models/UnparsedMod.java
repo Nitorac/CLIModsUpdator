@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class LocalMod implements Serializable {
+public class UnparsedMod implements Serializable {
     private File file;
 
     private String modid;
@@ -22,11 +22,11 @@ public class LocalMod implements Serializable {
 
     private String credits;
 
-    public LocalMod(File file){
+    public UnparsedMod(File file) {
         this.file = file;
     }
 
-    public LocalMod setFile(File file){
+    public UnparsedMod setFile(File file) {
         this.file = file;
         return this;
     }

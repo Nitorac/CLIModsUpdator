@@ -7,6 +7,7 @@ import fr.nitorac.climodsupdator.widget.ProgressCounter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.shell.standard.ShellComponent;
+import org.springframework.shell.standard.ShellMethod;
 
 @ShellComponent
 public class ModpackCommand {
@@ -22,4 +23,8 @@ public class ModpackCommand {
 
     @Autowired
     ProgressCounter progressCounter;
+
+    @ShellMethod(value = "Load a modpack from a directory", prefix = "load")
+    public void loadModpack() {
+    }
 }

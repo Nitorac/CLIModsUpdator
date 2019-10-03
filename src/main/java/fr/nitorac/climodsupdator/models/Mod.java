@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class RemoteMod {
+public class Mod {
     private long id;
     private String name;
 

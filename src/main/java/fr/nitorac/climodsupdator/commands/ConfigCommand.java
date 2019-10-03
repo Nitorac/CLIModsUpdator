@@ -12,8 +12,6 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
-import java.io.File;
-
 @ShellComponent
 public class ConfigCommand {
     @Autowired
@@ -29,10 +27,9 @@ public class ConfigCommand {
     @Autowired
     ProgressCounter progressCounter;
 
-    @ShellMethod(value = "Set the current working directory", prefix = "wd")
-    public static void setWorkingDirectory(@ShellOption("Path") String path){
-        CLIMApplication.WORKING_DIRECTORY = new File(path);
-        CLIMApplication.getStorageManager().getOptions().addProperty(JsonStorageManager.WD, path);
+    @ShellMethod(value = "Autoload", prefix = "autoload")
+    public static void setAutoload(@ShellOption("True if modpack loaded at startup") String load) {
+        CLIMApplication.getStorageManager().getOptions().addProperty(JsonStorageManager.AUTOLOAD_KEY, Boolean.parseBoolean(load));
         CLIMApplication.getStorageManager().saveOptions();
     }
 }

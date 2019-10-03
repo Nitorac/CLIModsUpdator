@@ -2,7 +2,7 @@ package fr.nitorac.climodsupdator.storage;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.nitorac.climodsupdator.models.LocalModpack;
+import fr.nitorac.climodsupdator.models.Modpack;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -13,10 +13,10 @@ public class JsonStorageManager {
     public static final File OPTIONS = new File("options.json");
     public static JsonObject rootOptions = new JsonObject();
 
-    public static final String WD = "workdir";
+    public static final String AUTOLOAD_KEY = "autoload";
 
     private File loadedModpackFile;
-    private LocalModpack loadedModpack;
+    private Modpack loadedModpack;
 
     public JsonStorageManager(){
         try {
@@ -29,15 +29,15 @@ public class JsonStorageManager {
         }
     }
 
-    public LocalModpack load(File directory) throws FileNotFoundException {
+    public Modpack load(File directory) throws FileNotFoundException {
         if (directory.isFile()) {
             directory = directory.getParentFile();
         }
-        loadedModpackFile = new File(directory, "modpack.json");
-        return loadedModpack = new LocalModpack(loadedModpackFile);
+        loadedModpackFile = new File(directory, "clim_modpack.json");
+        return (loadedModpack = new Modpack(loadedModpackFile));
     }
 
-    public LocalModpack getLoadedModpack() {
+    public Modpack getLoadedModpack() {
         return loadedModpack;
     }
 

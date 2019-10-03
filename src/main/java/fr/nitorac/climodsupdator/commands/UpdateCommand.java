@@ -2,29 +2,31 @@ package fr.nitorac.climodsupdator.commands;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import fr.nitorac.climodsupdator.CLIMApplication;
-import fr.nitorac.climodsupdator.models.LocalMod;
-import fr.nitorac.climodsupdator.models.RemoteMod;
+import fr.nitorac.climodsupdator.models.UnparsedMod;
 import fr.nitorac.climodsupdator.utils.InputReader;
 import fr.nitorac.climodsupdator.utils.ShellHelper;
 import fr.nitorac.climodsupdator.widget.ProgressBar;
 import fr.nitorac.climodsupdator.widget.ProgressCounter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import static org.springframework.shell.Availability.available;
+import static org.springframework.shell.Availability.unavailable;
 
 @ShellComponent
 public class UpdateCommand {
@@ -41,38 +43,35 @@ public class UpdateCommand {
     @Autowired
     ProgressCounter progressCounter;
 
-    private List<RemoteMod> projects;
-    private List<LocalMod> localMods;
+    private List<UnparsedMod> unparsedMods;
 
     public UpdateCommand(){
-        projects = new ArrayList<>();
-        localMods = new ArrayList<>();
+        unparsedMods = new ArrayList<>();
+    }
+
+    public Availability isAvailable() {
+        return CLIMApplication.getStorageManager().isModpackLoaded() ? available() : unavailable("vous devez charger un modpack !");
     }
 
     @ShellMethod("Fetch mods list from CurseForge")
+    @ShellMethodAvailability("isAvailable")
     public String update() {
         try {
-            projects = getRemoteMods();
-            shellHelper.printSuccess(projects.size() + " mods successfully loaded from CurseForge!");
-            localMods = getLocalMods();
-            shellHelper.printSuccess(localMods.size() + " mods successfully loaded from local storage!");
+            CLIMApplication.getActiveModpack().updateCache();
+            shellHelper.printSuccess(CLIMApplication.getActiveModpack().getRemoteMods().size() + " mods successfully loaded from CurseForge!");
         } catch (IOException e) {
             e.printStackTrace();
+            shellHelper.printError("Erreur : " + e.getMessage());
         }
-        return "YES";
+        return "";
     }
 
-    public List<RemoteMod> getRemoteMods() throws IOException{
-        String url = "https://addons-ecs.forgesvc.net/api/v2/addon/search?categoryId=0&gameId=432&gameVersion=" + CLIMApplication.getStorageManager().getLoadedModpack().getGameVersion() + "&index=0&pageSize=10000&searchFilter=&sectionId=6&sort=2";
-        return CLIMApplication.gson.fromJson(new InputStreamReader(new URL(url).openStream()), new TypeToken<List<RemoteMod>>(){}.getType());
-    }
-
-    public List<LocalMod> getLocalMods(){
+    public List<UnparsedMod> getUnparsedLocalMods() {
         List<String> errors = new ArrayList<>();
-        List<LocalMod> mods = new ArrayList<>();
-        File[] files = CLIMApplication.WORKING_DIRECTORY.listFiles((dir, name) -> name.toLowerCase().endsWith("jar"));
+        List<UnparsedMod> mods = new ArrayList<>();
+        File[] files = CLIMApplication.getStorageManager().getLoadedModpack().getBaseDir().listFiles((dir, name) -> name.toLowerCase().endsWith("jar"));
         if (files == null || files.length == 0) {
-            shellHelper.printError("No mod found in base folder : " + CLIMApplication.WORKING_DIRECTORY.getPath());
+            shellHelper.printError("No mod found in base folder : " + CLIMApplication.getStorageManager().getLoadedModpack().getBaseDir().getAbsolutePath());
             return mods;
         }
         Arrays.stream(files).forEach(jar -> {
@@ -80,7 +79,7 @@ public class UpdateCommand {
                 ZipEntry entry = zipFile.getEntry("mcmod.info");
                 if(entry != null){
                     JsonElement elem = new JsonParser().parse(new InputStreamReader(zipFile.getInputStream(entry), StandardCharsets.UTF_8));
-                    mods.add(CLIMApplication.gson.fromJson(elem.isJsonArray() ? elem.getAsJsonArray().get(0) : elem.getAsJsonObject().getAsJsonArray("modList").get(0), LocalMod.class).setFile(jar));
+                    mods.add(CLIMApplication.gson.fromJson(elem.isJsonArray() ? elem.getAsJsonArray().get(0) : elem.getAsJsonObject().getAsJsonArray("modList").get(0), UnparsedMod.class).setFile(jar));
                 }else{
                     errors.add(jar.getName());
                 }
