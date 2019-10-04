@@ -93,6 +93,7 @@ public class Modpack {
         }.getType()));
         writer.flush();
         writer.close();
+        loadCache();
     }
 
     public void readConf() throws FileNotFoundException {

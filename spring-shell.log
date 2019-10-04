@@ -26,3 +26,34 @@
 1570068228581:help
 1570068254081:stacktrace
 1570068262125:progress-bar
+1570149046128:help
+1570149073383:unload
+1570149074646:load
+1570149389414:help
+1570149523382:creat C:\\Users\\Nitorac\\AppData\\Roaming\\.minecraft\\mods
+1570149529243:create C:\\Users\\Nitorac\\AppData\\Roaming\\.minecraft\\mods
+1570149694771:create @C:\\Users\\Nitorac\\AppData\\Roaming\\.minecraft\\mods
+1570149773674:create C:/Users/Nitorac/AppData/Roaming/.minecraft/mods
+1570149789288:stacktrace
+1570149946787:create C:/Users/Nitorac/AppData/Roaming/.minecraft/mods
+1570149959445:Sérieux ?
+1570149961069:help
+1570149963197:update
+1570150098207:load C:/Users/Nitorac/AppData/Roaming/.minecraft/mods
+1570150100752:ls
+1570150102027:dir
+1570150111023:update
+1570151476404:load C:/Users/Nitorac/AppData/Roaming/.minecraft/mods
+1570151478570:ls
+1570151481722:autoload
+1570151485184:stacktrace
+1570151584000:load C:/Users/Nitorac/AppData/Roaming/.minecraft/mods
+1570151586610:yes
+1570151588266:autoload
+1570151592583:utoload
+1570151594572:autoload
+1570152053001:yed
+1570153359657:autoload
+1570153361741:exit
+1570153402611:update
+1570153410748:exit

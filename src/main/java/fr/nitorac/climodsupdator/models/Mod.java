@@ -18,6 +18,7 @@ public class Mod {
     private String summary;
     private long defaultFileId;
     private long downloadCount;
+    private String slug;
     private double popularityScore;
     private Date dateModified;
     private Date dateCreated;
